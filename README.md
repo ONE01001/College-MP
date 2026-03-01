@@ -117,7 +117,7 @@ College_MP/
 - Do not commit real secrets in `.env`
 - If any keys were exposed previously, rotate them immediately
 
-## Why This Project Stands Out (HR/Recruiter View)
+## Project Highlights
 - Solves a real student productivity problem with practical AI workflows
 - Demonstrates full-stack ownership: UI, API, auth, data, and deployment flow
 - Includes production-oriented concerns: route protection, rate limiting, environment config, static asset serving
