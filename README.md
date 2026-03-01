@@ -22,8 +22,8 @@ The frontend is built with React + Vite + Tailwind, while the backend uses Expre
 - 🚀 Live App: https://studyai-dc2u.onrender.com
 
 ## Test Credentials
--Email: demo@example.com
--Passowrd: demo@1234
+- Email: demo@example.com
+- Passowrd: demo@1234
 
 ## ✨ Features
 - User signup/login/logout with JWT cookie-based authentication
