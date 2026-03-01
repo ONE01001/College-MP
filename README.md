@@ -18,6 +18,13 @@ StudyAI is a collaborative full-stack web platform that helps students generate 
 
 The frontend is built with React + Vite + Tailwind, while the backend uses Express, MongoDB, JWT cookie auth, and Google Gemini.
 
+## 🌐 Live Link
+- 🚀 Live App: https://studyai-dc2u.onrender.com
+
+## Test Credentials
+-Email: demo@example.com
+-Passowrd: demo@1234
+
 ## ✨ Features
 - User signup/login/logout with JWT cookie-based authentication
 - Login rate limiting to reduce brute-force attempts
@@ -76,8 +83,7 @@ npm start
 ```
 This builds the frontend and serves it from Express.
 
-## 🌐 Live Link
-- 🚀 Live App: `https://studyai-dc2u.onrender.com`
+
 
 ## 🔌 API Snapshot
 ### 🔐 Auth
