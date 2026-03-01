@@ -1,4 +1,4 @@
-# StudyAI - AI-Powered Study Assistant
+﻿# StudyAI - AI-Powered Study Assistant 🤖📚
 
 [![MERN](https://img.shields.io/badge/Stack-MERN-16a34a?style=for-the-badge)](https://www.mongodb.com/mern-stack)
 [![React](https://img.shields.io/badge/Frontend-React_19-0ea5e9?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
@@ -6,19 +6,19 @@
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB_Atlas-15803d?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 [![Gemini](https://img.shields.io/badge/AI-Google_Gemini-f97316?style=for-the-badge)](https://ai.google.dev/)
 
-## Title
+## 🏷️ Title
 StudyAI - AI-Powered Study Assistant 
 
-## Overview
+## 📖 Overview
 StudyAI is a collaborative full-stack web platform that helps students generate study material quickly using AI. It combines authentication, PDF text extraction, and Gemini-powered content generation to produce:
-- Quiz questions (MCQs)
-- Flashcards
-- Topic-wise notes
-- PDF summary outputs with export support
+- 📝 Quiz questions (MCQs)
+- 🧠 Flashcards
+- 📚 Topic-wise notes
+- 📄 PDF summary outputs with export support
 
 The frontend is built with React + Vite + Tailwind, while the backend uses Express, MongoDB, JWT cookie auth, and Google Gemini.
 
-## Features
+## ✨ Features
 - User signup/login/logout with JWT cookie-based authentication
 - Login rate limiting to reduce brute-force attempts
 - AI MCQ generation by topic
@@ -29,14 +29,14 @@ The frontend is built with React + Vite + Tailwind, while the backend uses Expre
 - Route protection for core tools (`/notes`, `/quiz`, `/pdf`, `/flashcard`, `/contact`)
 - Single deployment mode: Express serves built frontend (`frontend/dist`)
 
-## Tech Stack
+## 🛠️ Tech Stack
 - Frontend: React 19, React Router, Vite, Tailwind CSS, DaisyUI, Framer Motion
 - Backend: Node.js, Express, Mongoose, JWT, bcryptjs, cookie-parser, express-rate-limit
 - Database: MongoDB Atlas
 - AI: Google Gemini via `@google/genai`
 - PDF/Text: `pdfjs-dist`, `html2pdf.js`, `jspdf`, `html2canvas`
 
-## Setup
+## ⚙️ Setup
 ### 1) Clone and install dependencies
 ```bash
 git clone <your-repo-url>
@@ -76,23 +76,23 @@ npm start
 ```
 This builds the frontend and serves it from Express.
 
-## Live Link
-- Live App: `https://studyai-dc2u.onrender.com`
+## 🌐 Live Link
+- 🚀 Live App: `https://studyai-dc2u.onrender.com`
 
-## API Snapshot
-### Auth
+## 🔌 API Snapshot
+### 🔐 Auth
 - `POST /api/auth/signup`
 - `POST /api/auth/login`
 - `POST /api/auth/logout`
 - `POST /api/auth/me`
 
-### AI Tools
+### 🧠 AI Tools
 - `POST /api/tools/generate-mcqs`
 - `POST /api/tools/generate-flashcards`
 - `POST /api/tools/generate-notes`
 - `POST /api/tools/summarize-text`
 
-## Project Structure
+## 🗂️ Project Structure
 ```text
 College_MP/
   backend/
@@ -111,19 +111,21 @@ College_MP/
   package.json
 ```
 
-## Security Notes
+## 🛡️ Security Notes
 - Uses `httpOnly` auth cookies and password hashing (`bcryptjs`)
 - Includes login rate limiting
 - Do not commit real secrets in `.env`
 - If any keys were exposed previously, rotate them immediately
 
-## Project Highlights
+## 🚀 Project Highlights
 - Solves a real student productivity problem with practical AI workflows
 - Demonstrates full-stack ownership: UI, API, auth, data, and deployment flow
 - Includes production-oriented concerns: route protection, rate limiting, environment config, static asset serving
 - Uses modern React ecosystem and LLM integration in a usable product format
 
-## Author
+## 👨‍💻 Author
 - Name: Krish Dua
 - Project: StudyAI (Collaborative Project)
+
+
 
