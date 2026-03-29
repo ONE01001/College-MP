@@ -130,7 +130,7 @@ College_MP/
 - Uses modern React ecosystem and LLM integration in a usable product format
 
 ## 👨‍💻 Author
-- Name: Krish Dua
+- Name: Krish Dua , Rahul verma
 - Project: StudyAI (Collaborative Project)
 
 
