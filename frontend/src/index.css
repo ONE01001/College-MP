@@ -15,25 +15,9 @@
 @layer base {
   body {
     font-family: "Lexend Tera", sans-serif;
-    background-color: #000; /* optional */
-    color: white; /* optional */
   }
-   h1 {
-    letter-spacing: -0.2em; /* tighten letters a bit */
-  }
-  p{
-    color: white;
-    font-weight: 100;
-    font-size: 0.9em;
-    letter-spacing: -0.08em;
-  }
-  h6{
-    color: white;
-    font-weight: 100;
-    font-size: 1.2em;
-    letter-spacing: -0.08em;
+  
 
-  }
 }
 html {
   scroll-behavior: smooth;

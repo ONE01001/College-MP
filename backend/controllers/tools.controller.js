@@ -175,11 +175,15 @@ Your output MUST follow these rules:
 1. Output ONLY valid HTML inside a single <div> element. Do NOT include <html>, <head>, or <body> tags.
 2. Use clean semantic structure such as: <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, or <em>.
 3. The format of the content should feel like structured notes—not a casual paragraph.
-4. use can not use inline styling or any kind of css 
-5.can use tags like <strong> and <em> to highlight key terms or concepts.
-5. avoid  css or styling keep it basic familiar to a basic notes pdf 
-6. also always thing of the layout of the content it should not breake when the html is rendered thats wht you have to use basic tags only use some css omre than described if needed otherwise its ok .
-manage the spcing using <br>tags if needed
+4. You may use simple inline CSS in the **style="" attribute** on any allowed HTML tag whenever needed for clean formatting and readability.
+5. Allowed inline CSS includes: margin, padding, font-size, font-weight, line-height, color, background-color, border, border-radius, text-align, and list-style-position.
+6. Strictly use inline CSS wherever needed to improve readability and visual structure of the summary.
+7. Headings must have clear hierarchy using stronger font-weight, larger font-size, and proper top/bottom spacing.
+8. Important terms, keywords, labels, definitions, and formulas must be clearly emphasized using <strong> and/or inline font-weight styling.
+9. Paragraphs, lists, and sections must have comfortable spacing and readable line-height so the summary is easy to scan.
+10. Use a clean readable font style consistently through inline CSS, but keep it simple and PDF-safe.
+11. Do NOT use complex styling, animations, flex, grids, scrolling behavior, overflow rules, absolute positioning, fixed sizing that can break wrapping, or layouts that may break PDF formatting.
+manage the spacing using <br> tags if needed
 
  HTML Formatting Rules:
    -ONly and only Allowed tags: <h1>, <h2>, <h3>, <h4>, <p>, <ul>, <ol>, <li>, <strong>, <em>,<br>, <span>, <div>, and <code>.
@@ -271,7 +275,14 @@ CORE RULES (Follow Strictly):
    -dont use any <a> tag or any kind of link tag and also code tag is also prohibited
    -use of <pre> tag for anything is also prohibited use only and only allowed tags given above
    -For giving the examples such as writing <h1> or <p> use &lt;h1&gt; or &lt;p&gt; but this is only for giving HTML examples do not use it for the actual content that has to be rendered 
-   - You may use simple inline CSS only in the **style="" attribute** and ONLY for readability (e.g., margin, padding, font-size, line-height, bold). Do NOT use complex styling, animations, flex, grids, scrolling behavior, overflow rules, absolute positioning, or layouts that may break PDF formatting.
+   - You may use simple inline CSS in the **style="" attribute** on any allowed HTML tag whenever needed for clean formatting and readability.
+   - Allowed inline CSS includes: margin, padding, font-size, font-weight, line-height, color, background-color, border, border-radius, text-align, and list-style-position.
+   - Strictly use inline CSS wherever needed to improve readability and visual structure of the notes.
+   - Headings must have clear hierarchy using stronger font-weight, larger font-size, and proper top/bottom spacing.
+   - Important terms, keywords, labels, definitions, and formulas must be clearly emphasized using <strong> and/or inline font-weight styling.
+   - Paragraphs, lists, and sections must have comfortable spacing and readable line-height so the notes are easy to scan.
+   - Use a clean readable font style consistently through inline CSS, but keep it simple and PDF-safe.
+   - Do NOT use complex styling, animations, flex, grids, scrolling behavior, overflow rules, absolute positioning, fixed sizing that can break wrapping, or layouts that may break PDF formatting.
    - All text must wrap naturally its the most important thing to convert it to the pdf no overflow-auto can be given of any kind. No element should be wide enough to require horizontal scrolling.
 
 3. Content Requirements:

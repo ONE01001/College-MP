@@ -249,7 +249,7 @@ if(!data.success){
   <div
     className="
       relative overflow-auto 
-      prose prose-lg max-w-none
+      max-w-none
       px-8 py-6 rounded-xl
       bg-gradient-to-br from-white to-gray-50
       shadow-[0_8px_30px_rgba(0,0,0,0.12)]
@@ -275,7 +275,7 @@ if(!data.success){
     />
   </div>
 </div>
-<style>
+{/* <style>
 {`
  
   @keyframes fadeIn {
@@ -363,7 +363,7 @@ if(!data.success){
     padding: 8px;
   }
 `}
-</style>
+</style> */}
 
         </div>
 

@@ -155,7 +155,7 @@ if(!data.success){
   
                     const idoc = iframe.contentDocument || iframe.contentWindow.document;
                     idoc.open();
-                    idoc.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:12mm;background:#fff;color:#111827;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial} img{max-width:100%;height:auto}</style></head><body></body></html>`);
+                    idoc.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:8mm;background:#fff;color:#111827;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial} img{max-width:100%;height:auto}</style></head><body></body></html>`);
                     idoc.close();
   
                     idoc.body.innerHTML = previewHtml;
@@ -201,8 +201,8 @@ if(!data.success){
   {/* --- Scrollable content box --- */}
   <div
     className="
-      relative overflow-y-auto prose prose-lg max-w-none
-      px-8 py-6 rounded-xl
+      relative overflow-y-auto max-w-none
+      px-8 py-6 rounded-xl 
       bg-gradient-to-br from-white to-gray-50
       shadow-[0_8px_30px_rgba(0,0,0,0.12)]
       border border-gray-200/70
@@ -224,7 +224,7 @@ if(!data.success){
   </div>
 </div>
 
-<style>
+{/* <style>
 {`
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -276,7 +276,7 @@ if(!data.success){
     padding: 8px;
   }
 `}
-</style>
+</style> */}
 
         </div>
 
