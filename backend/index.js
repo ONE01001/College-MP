@@ -1,11 +1,11 @@
 import express from "express";
-dotenv.config();
 import mongoose from "mongoose";
 import cors from "cors";
 import authRouter from "./routes/auth.route.js";
 import toolsRouter from "./routes/tools.route.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+dotenv.config({ path: "./backend/.env" });
 import { GoogleGenAI } from "@google/genai";
 import path from "path";
 const _dirname = path.resolve()

@@ -5,6 +5,8 @@ import Notes from "../components/Notes";
 import FlashCard from "@/components/FlashCard";
 import ToolsOverview from "@/components/ToolsOverview";
 import HeroSection from "@/components/HeroSection";
+import StudyPlanner from "@/components/StudyPlanner";
+import SmartQuestionGenerator from "@/components/SmartQuestionGenerator";
 
 const HomePage = () => {
   return (
@@ -15,6 +17,8 @@ const HomePage = () => {
       <Quizz />
       <Notes />
       <FlashCard/>
+      <StudyPlanner/>
+      <SmartQuestionGenerator/>
     </>
   );
 };

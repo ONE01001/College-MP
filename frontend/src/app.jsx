@@ -9,6 +9,7 @@ import PdfPage from "./pages/PdfPage";
 import Contact from "./pages/Contact";
 import FlashcardsPage from "./pages/FlashcardPage";
 import AuthPage  from "./pages/Authpage";
+import StudyPlannerPage from './pages/StudyPlannerPage';
 
 const App = () => {
   const [user,setUser]=React.useState(null);
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/pdf" element={!user? <AuthPage user={user} setUser={setUser}/>:<PdfPage />} />
          <Route path="/flashcard" element={!user? <AuthPage user={user} setUser={setUser}/>:<FlashcardsPage />} />
          <Route path="/contact" element={!user? <AuthPage user={user} setUser={setUser}/>:<Contact />} />
+         <Route path="/study-planner" element={<StudyPlannerPage />} />
       </Routes>
       <Footer />
     </div>
