@@ -3,7 +3,7 @@ import { gemini } from "../index.js";
 export const generateStudyPlan = async (req, res) => {
   const {
     subjectName,
-    topics = "",           // ← all units/topics the user typed
+    topics = "",          
     daysUntilExam,
     studyHoursPerDay,
     currentKnowledge = "beginner",
@@ -102,6 +102,8 @@ IMPORTANT: The total days in your plan must add up to exactly ${daysUntilExam}. 
       contents,
       config: { systemInstruction }
     });
+
+    console.log("AI raw response:", response.text);
 
     console.log("Tokens used:", response.usageMetadata?.totalTokenCount);
 

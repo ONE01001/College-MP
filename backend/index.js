@@ -5,7 +5,7 @@ import authRouter from "./routes/auth.route.js";
 import toolsRouter from "./routes/tools.route.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-dotenv.config({ path: "./backend/.env" });
+dotenv.config();
 import { GoogleGenAI } from "@google/genai";
 import path from "path";
 const _dirname = path.resolve()

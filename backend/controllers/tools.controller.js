@@ -357,6 +357,159 @@ res.status(200).json({success:false, message: "Notes cannot be generated from th
 }
 
 
+export const generateQuestions = async (req, res) => {
+  const { content, questionTypes, includeAnswers } = req.body;
+
+  try {
+    
+    if (!content) {
+      return res.status(400).json({
+        success: false,
+        message: "Content is required",
+      });
+    }
+
+    if (!Array.isArray(questionTypes) || questionTypes.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one question type must be selected",
+      });
+    }
+
+    if (typeof includeAnswers !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        message: "includeAnswers must be boolean",
+      });
+    }
+
+    
+    const systemInstruction = `
+You are an AI exam paper generator.
+
+Your job is to generate IMPORTANT and EXAM-RELEVANT questions from the given study content.
+
+Analyze deeply and focus on:
+- Important topics
+- Frequently asked concepts
+- High-weightage areas
+
+---
+
+Rules:
+
+1. Generate ONLY for the selected question types.
+2. DO NOT create any extra category.
+3. Maintain order:
+   - First 3_marks (if selected)
+   - Then 5_marks (if selected)
+   - Then remaining selected types
+
+4. Decide number of questions automatically based on:
+   - Content length
+   - Importance of topics
+
+5. Questions must be:
+   - Clear
+   - Concept-based
+   - Exam-oriented
+   - Non-repetitive
+
+6. If includeAnswers = true:
+   include answers
+   else DO NOT include answers
+
+7. For each selected type atleast 1 question should be there 
+---
+
+Output STRICT JSON format:
+
+{
+  "questions": {
+    "<type>": [
+      {
+        "question": "",
+        "answer": ""
+      }
+    ]
+  }
+}
+
+IMPORTANT:
+- Keys MUST match selected types EXACTLY (e.g. 2_marks, 3_marks, 5_marks)
+- Do NOT include any extra keys
+- Return ONLY JSON
+`;
+
+    
+    const prompt = `
+Generate exam questions from the content below.
+
+Selected Question Types: ${questionTypes.join(", ")}
+Include Answers: ${includeAnswers}
+
+STRICT RULE:
+Generate ONLY for selected types.
+
+Content:
+${content}
+`;
+
+    
+    const response = await gemini.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+      config: {
+        systemInstruction,
+      },
+    });
+
+    console.log("tokens used:", response.usageMetadata?.totalTokenCount);
+
+    let text = response.text;
+
+    
+    text = text.replace(/```json|```/g, "").trim();
+
+    let parsed;
+
+    try {
+      parsed = JSON.parse(text);
+    } catch (err) {
+      console.error("JSON Parse Error:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to parse AI response",
+      });
+    }
+
+    
+    const filteredQuestions = {};
+    questionTypes.forEach((type) => {
+      if (parsed.questions && parsed.questions[type]) {
+        filteredQuestions[type] = parsed.questions[type];
+      } else {
+        filteredQuestions[type] = [];
+      }
+    });
+
+    
+    return res.status(200).json({
+      success: true,
+      data: {
+        questions: filteredQuestions,
+      },
+      message: "Questions generated successfully",
+    });
+
+  } catch (error) {
+    console.error("Error generating questions:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to generate questions",
+    });
+  }
+};
 
 
 
