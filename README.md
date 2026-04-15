@@ -15,6 +15,9 @@ StudyAI is a collaborative full-stack web platform that helps students generate 
 - 🧠 Flashcards
 - 📚 Topic-wise notes
 - 📄 PDF summary outputs with export support
+- 📅 Personalized study planner schedules
+- ❓ Important question generation tools
+- 🕘 Study history tracking and Google auth support
 
 The frontend is built with React + Vite + Tailwind, while the backend uses Express, MongoDB, JWT cookie auth, and Google Gemini.
 
@@ -27,11 +30,15 @@ The frontend is built with React + Vite + Tailwind, while the backend uses Expre
 
 ## ✨ Features
 - User signup/login/logout with JWT cookie-based authentication
+- Google authentication support
 - Login rate limiting to reduce brute-force attempts
 - AI MCQ generation by topic
+- AI important question generator for exam preparation
 - AI flashcard generation from topic/content
 - AI note generation from topic/unit/syllabus input
 - PDF upload and AI summary generation from extracted text
+- AI study planner generation with day-wise schedules
+- Study history feature for tracking previous activity and generated content
 - Export generated notes/summaries to downloadable PDF
 - Route protection for core tools (`/notes`, `/quiz`, `/pdf`, `/flashcard`, `/contact`)
 - Single deployment mode: Express serves built frontend (`frontend/dist`)
@@ -93,10 +100,24 @@ This builds the frontend and serves it from Express.
 - `POST /api/auth/me`
 
 ### 🧠 AI Tools
+- `POST /api/tools/generate-study-plan`
 - `POST /api/tools/generate-mcqs`
 - `POST /api/tools/generate-flashcards`
 - `POST /api/tools/generate-notes`
 - `POST /api/tools/summarize-text`
+- `POST /api/tools/generate-questions`
+
+## 🧰 Study Tools
+- Study Planner: generates a personalized day-by-day plan based on subject, topics, exam timeline, and study hours.
+- Quiz Generator: creates MCQs from study topics to help with quick practice and self-testing.
+- Important Questions Generator: produces exam-focused questions from study content for revision.
+- Flashcards: turns study material into quick memory-based revision cards.
+- Notes Generator: creates structured topic or unit-wise notes.
+- PDF Summarizer: converts long study material into concise and readable summaries.
+
+## 🚧 Coming Soon
+- Study history feature to save and revisit previously generated study content and activity.
+- Expanded Google auth flow for faster sign-in and smoother onboarding.
 
 ## 🗂️ Project Structure
 ```text
