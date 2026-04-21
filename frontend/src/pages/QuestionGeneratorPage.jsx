@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaBrain, FaLightbulb, FaCheckCircle, FaChevronDown, FaChevronUp, FaCopy, FaDownload } from "react-icons/fa";
+import { FaBrain, FaLightbulb, FaCheckCircle, FaChevronDown, FaChevronUp, FaCopy, FaDownload, FaUpload, FaFilePdf, FaTimes } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
+import { extractTextFromPDF } from "../lib/extractPDF";
 
 const QUESTION_TYPES = [
   { key: "2_marks", label: "2 Marks", desc: "Short concept-check questions", color: "#22d3ee", glow: "rgba(34,211,238,0.3)" },
@@ -27,6 +28,10 @@ export default function QuestionGeneratorPage() {
   const [downloading, setDownloading] = useState(false);
   const [charCount, setCharCount] = useState(0);
 
+  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfText, setPdfText] = useState("");
+  const [pdfLoading, setPdfLoading] = useState(false);
+
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const showToast = (message, type = "info") => {
@@ -37,6 +42,30 @@ export default function QuestionGeneratorPage() {
     toast.innerHTML = `<div><span>${message}</span></div>`;
     container.appendChild(toast);
     setTimeout(() => { toast.classList.add("opacity-0", "transition-opacity"); setTimeout(() => toast.remove(), 500); }, 3000);
+  };
+
+  const handlePdfUpload = async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setPdfFile(f);
+    setPdfLoading(true);
+    try {
+      const text = await extractTextFromPDF(f);
+      setPdfText(text);
+      showToast("📄 PDF loaded successfully!", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("❌ Failed to read PDF", "error");
+      setPdfFile(null);
+      setPdfText("");
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
+  const handleRemovePdf = () => {
+    setPdfFile(null);
+    setPdfText("");
   };
 
   const toggleType = (key) => {
@@ -58,7 +87,14 @@ export default function QuestionGeneratorPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!content.trim()) { showToast("⚠️ Please paste your notes first!", "warning"); return; }
+
+   
+    const finalContent = pdfFile ? pdfText : content;
+
+    if (!finalContent.trim()) {
+      showToast(pdfFile ? "⚠️ PDF seems empty, try another file!" : "⚠️ Please paste your notes or upload a PDF!", "warning");
+      return;
+    }
     if (questionTypes.length === 0) { showToast("⚠️ Select at least one question type!", "warning"); return; }
     setLoading(true);
     setResult(null);
@@ -67,7 +103,7 @@ export default function QuestionGeneratorPage() {
       const res = await fetch("/api/tools/generate-questions", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ content, questionTypes, includeAnswers }),
+        body: JSON.stringify({ content: finalContent, questionTypes, includeAnswers }),
       });
       const data = await res.json().catch(() => null);
       if (!data?.success) { showToast(data?.message || "❌ Failed to generate questions", "error"); return; }
@@ -187,117 +223,173 @@ ${sections}</body></html>`;
           <span className="text-white">Generator</span>
         </h1>
         <p className="text-gray-400 text-base sm:text-lg max-w-xl mx-auto">
-          Paste your notes → get exam-ready questions instantly. Covers 2-mark, 3-mark, and 5-mark formats.
+          Paste your notes or upload a PDF → get exam-ready questions instantly. Covers 2-mark, 3-mark, and 5-mark formats.
         </p>
       </div>
+
       {!result && (
         <form onSubmit={handleSubmit} className="w-full max-w-3xl flex flex-col gap-6">
 
-        <div className="relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/40 via-violet-500/40 to-fuchsia-500/40 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500 -z-10" />
-          <div className="bg-gray-900/80 border border-white/10 rounded-2xl p-5 backdrop-blur-xl">
-            <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-bold text-gray-300 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                Your Notes / Study Content *
-              </label>
-              <span className="text-xs text-gray-500">{charCount} chars</span>
-            </div>
-            <textarea
-              rows={9}
-              placeholder={"Paste your full chapter, unit notes, or any study material here...\n\nThe AI will analyze all key concepts and generate exam-relevant questions across your selected marks categories."}
-              value={content}
-              onChange={(e) => { setContent(e.target.value); setCharCount(e.target.value.length); }}
-              className="w-full bg-transparent text-white placeholder-gray-600 text-sm leading-relaxed resize-y outline-none border-none font-mono"
-              style={{ minHeight: 200 }}
-            />
-          </div>
-        </div>
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/40 via-violet-500/40 to-fuchsia-500/40 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition duration-500 -z-10" />
+            <div className="bg-gray-900/80 border border-white/10 rounded-2xl p-5 backdrop-blur-xl">
 
-        <div>
-          <p className="text-sm font-bold text-gray-300 mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-violet-400" />
-            Question Types to Generate
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {QUESTION_TYPES.map(({ key, label, desc, color, glow }) => {
-              const selected = questionTypes.includes(key);
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => toggleType(key)}
-                  className="relative rounded-xl p-4 text-left transition-all duration-200 border-2 outline-none"
-                  style={{
-                    borderColor: selected ? color : "rgba(255,255,255,0.1)",
-                    background: selected ? `rgba(${color === "#22d3ee" ? "34,211,238" : color === "#a78bfa" ? "167,139,250" : "244,114,182"},0.08)` : "rgba(255,255,255,0.03)",
-                    boxShadow: selected ? `0 0 20px ${glow}` : "none",
-                  }}
+             
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-sm font-bold text-gray-300 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                  Your Notes / Study Content *
+                </label>
+                {!pdfFile && (
+                  <span className="text-xs text-gray-500">{charCount} chars</span>
+                )}
+              </div>
+
+              {pdfFile ? (
+               
+                <div
+                  className="w-full flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed py-8 px-4 text-center"
+                  style={{ borderColor: "rgba(34,211,238,0.4)", background: "rgba(34,211,238,0.05)" }}
                 >
-                  {selected && (
-                    <span className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full flex items-center justify-center text-black text-xs font-bold" style={{ background: color }}>✓</span>
+                  {pdfLoading ? (
+                    <>
+                      <svg className="animate-spin h-8 w-8 text-cyan-400" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      <p className="text-sm text-cyan-400 font-medium">Reading PDF...</p>
+                    </>
+                  ) : (
+                    <>
+                      <FaFilePdf className="text-4xl text-cyan-400" />
+                      <div>
+                        <p className="text-sm font-semibold text-cyan-300">{pdfFile.name}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{pdfText.length.toLocaleString()} characters extracted</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleRemovePdf}
+                        className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-red-400 transition-colors mt-1"
+                      >
+                        <FaTimes className="text-xs" />
+                        Remove PDF — switch to text input
+                      </button>
+                    </>
                   )}
-                  <p className="font-bold text-base mb-0.5" style={{ color: selected ? color : "#9ca3af" }}>{label}</p>
-                  <p className="text-xs text-gray-500 leading-snug">{desc}</p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                </div>
+              ) : (
+                
+                <>
+                  
+                  <label
+                    className="flex items-center gap-2 cursor-pointer w-fit mb-3 px-3 py-1.5 rounded-lg border border-dashed border-white/20 hover:border-cyan-500/60 bg-white/5 hover:bg-cyan-500/10 transition-all text-xs text-gray-400 hover:text-cyan-400"
+                  >
+                    <FaUpload className="text-xs" />
+                    Upload PDF instead
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      className="hidden"
+                      onChange={handlePdfUpload}
+                    />
+                  </label>
 
-        <div className="flex items-center justify-between bg-gray-900/60 border border-white/10 rounded-xl px-5 py-4 backdrop-blur-sm">
+                  <textarea
+                    rows={9}
+                    placeholder={"Paste your full chapter, unit notes, or any study material here...\n\nThe AI will analyze all key concepts and generate exam-relevant questions across your selected marks categories."}
+                    value={content}
+                    onChange={(e) => { setContent(e.target.value); setCharCount(e.target.value.length); }}
+                    className="w-full bg-transparent text-white placeholder-gray-600 text-sm leading-relaxed resize-y outline-none border-none font-mono"
+                    style={{ minHeight: 200 }}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+
           <div>
-            <p className="font-semibold text-sm text-white">Include Answers</p>
-            <p className="text-xs text-gray-500 mt-0.5">Show model answers alongside each question</p>
+            <p className="text-sm font-bold text-gray-300 mb-3 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-violet-400" />
+              Question Types to Generate
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {QUESTION_TYPES.map(({ key, label, desc, color, glow }) => {
+                const selected = questionTypes.includes(key);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => toggleType(key)}
+                    className="relative rounded-xl p-4 text-left transition-all duration-200 border-2 outline-none"
+                    style={{
+                      borderColor: selected ? color : "rgba(255,255,255,0.1)",
+                      background: selected ? `rgba(${color === "#22d3ee" ? "34,211,238" : color === "#a78bfa" ? "167,139,250" : "244,114,182"},0.08)` : "rgba(255,255,255,0.03)",
+                      boxShadow: selected ? `0 0 20px ${glow}` : "none",
+                    }}
+                  >
+                    {selected && (
+                      <span className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full flex items-center justify-center text-black text-xs font-bold" style={{ background: color }}>✓</span>
+                    )}
+                    <p className="font-bold text-base mb-0.5" style={{ color: selected ? color : "#9ca3af" }}>{label}</p>
+                    <p className="text-xs text-gray-500 leading-snug">{desc}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
+          <div className="flex items-center justify-between bg-gray-900/60 border border-white/10 rounded-xl px-5 py-4 backdrop-blur-sm">
+            <div>
+              <p className="font-semibold text-sm text-white">Include Answers</p>
+              <p className="text-xs text-gray-500 mt-0.5">Show model answers alongside each question</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIncludeAnswers(v => !v)}
+              className="relative w-12 h-6 rounded-full transition-all duration-300 flex-shrink-0"
+              style={{ background: includeAnswers ? "linear-gradient(90deg,#22d3ee,#a78bfa)" : "rgba(255,255,255,0.1)" }}
+            >
+              <span
+                className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300"
+                style={{ left: includeAnswers ? "calc(100% - 1.375rem)" : "0.125rem" }}
+              />
+            </button>
+          </div>
+
           <button
-            type="button"
-            onClick={() => setIncludeAnswers(v => !v)}
-            className="relative w-12 h-6 rounded-full transition-all duration-300 flex-shrink-0"
-            style={{ background: includeAnswers ? "linear-gradient(90deg,#22d3ee,#a78bfa)" : "rgba(255,255,255,0.1)" }}
+            type="submit"
+            disabled={loading || pdfLoading}
+            className="relative w-full py-4 rounded-2xl font-bold text-lg overflow-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+            style={{
+              background: (loading || pdfLoading) ? "rgba(255,255,255,0.05)" : "linear-gradient(135deg, #06b6d4, #7c3aed, #ec4899)",
+              boxShadow: (loading || pdfLoading) ? "none" : "0 0 40px rgba(124,58,237,0.4), 0 0 80px rgba(6,182,212,0.2)",
+            }}
           >
-            <span
-              className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300"
-              style={{ left: includeAnswers ? "calc(100% - 1.375rem)" : "0.125rem" }}
-            />
+            <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+            {loading ? (
+              <span className="flex items-center justify-center gap-3 text-gray-400">
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Generating Questions...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                <FaBrain className="text-xl" />
+                Generate Questions
+              </span>
+            )}
           </button>
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="relative w-full py-4 rounded-2xl font-bold text-lg overflow-hidden transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
-          style={{
-            background: loading ? "rgba(255,255,255,0.05)" : "linear-gradient(135deg, #06b6d4, #7c3aed, #ec4899)",
-            boxShadow: loading ? "none" : "0 0 40px rgba(124,58,237,0.4), 0 0 80px rgba(6,182,212,0.2)",
-          }}
-        >
-          <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-          {loading ? (
-            <span className="flex items-center justify-center gap-3 text-gray-400">
-              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-              </svg>
-              Generating Questions...
-            </span>
-          ) : (
-            <span className="flex items-center justify-center gap-2">
-              <FaBrain className="text-xl" />
-              Generate Questions
-            </span>
+          {loading && (
+            <p className="text-center text-xs text-gray-500 italic animate-pulse">
+              AI is analyzing your notes and crafting exam-relevant questions...
+            </p>
           )}
-        </button>
-
-        {loading && (
-          <p className="text-center text-xs text-gray-500 italic animate-pulse">
-            AI is analyzing your notes and crafting exam-relevant questions...
-          </p>
-        )}
-      </form>
+        </form>
       )}
 
-     
       {result && (
         <div id="results-section" className="w-full max-w-3xl mt-14">
 
@@ -340,7 +432,6 @@ ${sections}</body></html>`;
             if (!questions?.length) return null;
             return (
               <div key={typeKey} className="mb-10">
-               
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${c.border}, transparent)` }} />
                   <span className="text-sm font-bold px-4 py-1 rounded-full border" style={{ borderColor: c.border, color: c.badge, background: c.badgeBg }}>
@@ -360,7 +451,6 @@ ${sections}</body></html>`;
                         className="rounded-xl border transition-all duration-200 overflow-hidden"
                         style={{ borderColor: isExpanded ? c.border : "rgba(255,255,255,0.08)", background: isExpanded ? c.bg : "rgba(255,255,255,0.02)", boxShadow: isExpanded ? `0 0 20px ${c.glow || "transparent"}` : "none" }}
                       >
-                     
                         <div className="flex items-start gap-3 p-4">
                           <span className="flex-shrink-0 text-xs font-bold px-2.5 py-1 rounded-full mt-0.5" style={{ background: c.badgeBg, color: c.badge }}>
                             Q{idx + 1}
@@ -387,7 +477,6 @@ ${sections}</body></html>`;
                           </div>
                         </div>
 
-                      
                         {includeAnswers && q.answer && isExpanded && (
                           <div
                             className="mx-4 mb-4 p-4 rounded-lg"
@@ -404,32 +493,33 @@ ${sections}</body></html>`;
               </div>
             );
           })}
-          <button
-  onClick={() => {
-    setResult(null);
-    setContent("");
-    setExpanded({});
-    setCopied({});
-  }}
-  className="group relative overflow-hidden px-6 py-3 rounded-2xl font-bold text-sm sm:text-base tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-95"
-  style={{
-    background: "linear-gradient(135deg,#06b6d4,#7c3aed,#ec4899)",
-    boxShadow: "0 0 25px rgba(124,58,237,0.35)",
-  }}
->
-  <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-  <span className="relative flex items-center gap-2 text-white">
-    Generate New Questions
-  </span>
-</button>
 
-         
+          <button
+            onClick={() => {
+              setResult(null);
+              setContent("");
+              setExpanded({});
+              setCopied({});
+              setPdfFile(null);
+              setPdfText("");
+            }}
+            className="group relative overflow-hidden px-6 py-3 rounded-2xl font-bold text-sm sm:text-base tracking-wide transition-all duration-300 hover:scale-[1.03] active:scale-95"
+            style={{
+              background: "linear-gradient(135deg,#06b6d4,#7c3aed,#ec4899)",
+              boxShadow: "0 0 25px rgba(124,58,237,0.35)",
+            }}
+          >
+            <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative flex items-center gap-2 text-white">
+              Generate New Questions
+            </span>
+          </button>
+
           <p className="text-center text-xs text-gray-600 mt-6 pb-2">
             Tip: click the arrow on any question to reveal its answer • use Print or Download for offline study
           </p>
         </div>
       )}
-      
 
       <style>{`
         @keyframes shimmer { 0% { background-position: -100% 0; } 100% { background-position: 100% 0; } }
