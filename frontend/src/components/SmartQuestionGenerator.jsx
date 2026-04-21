@@ -9,13 +9,11 @@ const SmartQuestionGenerator = () => {
       id="question-generator"
       className="relative h-screen w-full flex items-center justify-end bg-black text-white overflow-hidden px-10 sm:px-20"
     >
-      {/* 🧡 Gradient Overlay */}
+    
       <div className="absolute inset-0 bg-gradient-to-br from-orange-900/10 via-black to-black opacity-90 z-0"></div>
 
-      {/* 💡 Orange Glow */}
       <div className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-orange-500/25 blur-[150px] rounded-full -translate-y-1/2 z-0"></div>
 
-      {/* 🌟 Main Content */}
       <div className="relative z-10 flex flex-col justify-between 
                       items-start lg:items-end
                       text-left lg:text-right
@@ -31,10 +29,9 @@ const SmartQuestionGenerator = () => {
           User Notes → 🤖 AI Processing → 🔘 MCQs ✏️ Short Qs ⭐ Important Qs
         </p>
 
-        {/* Button wrapper matching Flashcard component */}
         <div className="w-full flex justify-start lg:justify-end">
           <button
-            onClick={() => navigate("/question-generator")}
+            onClick={() => navigate("/generate-questions")}
             className="text-nowrap text-sm md:text-lg border-2 border-white text-white px-8 py-3 rounded-full bg-transparent hover:bg-white hover:text-black font-semibold transition duration-300"
           >
             Generate Questions
@@ -42,7 +39,6 @@ const SmartQuestionGenerator = () => {
         </div>
       </div>
 
-      {/* Image */}
       <div className="absolute top-10 md:left-10 h-fit">
         <img
           src="/question.png"

@@ -8,19 +8,14 @@ const StudyPlanner = () => {
       id="study-planner"
       className="relative min-h-[90vh] w-full flex items-center justify-start bg-black text-white overflow-hidden px-10 sm:px-20"
     >
-      {/* 🔴 Gradient Overlay - Changed to Yellow */}
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-black to-black opacity-95 z-0"></div>
 
-      {/* 💡 Yellow Glow Effect */}
       <div className="absolute top-1/2 left-1/4 w-[900px] h-[900px] bg-yellow-500/30 blur-[180px] rounded-full -translate-y-1/2 z-0"></div>
 
-      {/* 🕶️ Vignette Effect */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.8)_100%)] z-0"></div>
 
-      {/* 🌟 Main Content */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl w-full gap-10">
-        
-        {/* ✨ Left Text Section */}
+     
         <div className="flex-1 text-left space-y-8">
           <h2 className=" text-4xl sm:text-6xl font-extrabold leading-tight">
             Create Study Plans <br />

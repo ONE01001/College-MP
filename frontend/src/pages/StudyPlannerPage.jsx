@@ -104,21 +104,20 @@ const StudyPlannerPage = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // ── Builds clean button-free HTML for PDF/print ───────────────────────────
   const buildPrintableHTML = () => {
-    const borderColor = { critical: '#ef4444', high: '#f97316', medium: '#3b82f6', low: '#22c55e' };
-    const bgColor     = { critical: '#fef2f2', high: '#fff7ed', medium: '#eff6ff', low: '#f0fdf4' };
-    const badgeBg     = { critical: '#ef4444', high: '#f97316', medium: '#3b82f6', low: '#22c55e' };
+    const borderColor = { critical: '#ef4444', high: '#f97316', medium: '#eab308', low: '#22c55e' };
+    const bgColor     = { critical: '#fef2f2', high: '#fff7ed', medium: '#fefce8', low: '#f0fdf4' };
+    const badgeBg     = { critical: '#ef4444', high: '#f97316', medium: '#eab308', low: '#22c55e' };
 
     const statsHtml = `
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
-        <div style="background:#f5f3ff;padding:12px;border-radius:10px;border:1px solid #ddd6fe;">
-          <p style="font-size:11px;color:#7c3aed;font-weight:600;margin:0 0 4px;">Exam Date</p>
-          <p style="font-size:13px;font-weight:700;color:#4c1d95;margin:0;">${studyPlan.examDate}</p>
+        <div style="background:#fefce8;padding:12px;border-radius:10px;border:1px solid #fde68a;">
+          <p style="font-size:11px;color:#a16207;font-weight:600;margin:0 0 4px;">Exam Date</p>
+          <p style="font-size:13px;font-weight:700;color:#713f12;margin:0;">${studyPlan.examDate}</p>
         </div>
-        <div style="background:#eff6ff;padding:12px;border-radius:10px;border:1px solid #bfdbfe;">
-          <p style="font-size:11px;color:#1d4ed8;font-weight:600;margin:0 0 4px;">Total Days</p>
-          <p style="font-size:13px;font-weight:700;color:#1e3a8a;margin:0;">${studyPlan.totalDays} days</p>
+        <div style="background:#fffbeb;padding:12px;border-radius:10px;border:1px solid #fcd34d;">
+          <p style="font-size:11px;color:#b45309;font-weight:600;margin:0 0 4px;">Total Days</p>
+          <p style="font-size:13px;font-weight:700;color:#78350f;margin:0;">${studyPlan.totalDays} days</p>
         </div>
         <div style="background:#f0fdf4;padding:12px;border-radius:10px;border:1px solid #bbf7d0;">
           <p style="font-size:11px;color:#15803d;font-weight:600;margin:0 0 4px;">Daily Hours</p>
@@ -141,13 +140,13 @@ const StudyPlannerPage = () => {
       </div>` : '';
 
     const scheduleHtml = studyPlan.schedule.map(day => `
-      <div style="border:2px solid ${borderColor[day.priority] || '#3b82f6'};background:${bgColor[day.priority] || '#eff6ff'};border-radius:10px;padding:14px;margin-bottom:14px;page-break-inside:avoid;">
+      <div style="border:2px solid ${borderColor[day.priority] || '#eab308'};background:${bgColor[day.priority] || '#fefce8'};border-radius:10px;padding:14px;margin-bottom:14px;page-break-inside:avoid;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
           <div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
               <span style="font-weight:700;font-size:15px;">Day ${day.day}</span>
               <span style="font-size:11px;color:#6b7280;">• ${day.date || ''}</span>
-              <span style="background:${badgeBg[day.priority] || '#3b82f6'};color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;">${(day.priority || '').toUpperCase()}</span>
+              <span style="background:${badgeBg[day.priority] || '#eab308'};color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;">${(day.priority || '').toUpperCase()}</span>
             </div>
             <p style="font-size:11px;font-weight:600;color:#6b7280;margin:0 0 2px;">${day.phase || ''}</p>
             <p style="font-weight:700;font-size:14px;color:#111827;margin:0;">${day.title || ''}</p>
@@ -157,7 +156,7 @@ const StudyPlannerPage = () => {
         <div style="margin-bottom:10px;">
           ${(day.tasks || []).map(task => `
             <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;">
-              <span style="color:#7c3aed;font-size:10px;margin-top:4px;flex-shrink:0;">●</span>
+              <span style="color:#d97706;font-size:10px;margin-top:4px;flex-shrink:0;">●</span>
               <span style="font-size:13px;color:#374151;line-height:1.5;">${task}</span>
             </div>`).join('')}
         </div>
@@ -180,7 +179,7 @@ const StudyPlannerPage = () => {
   </style>
 </head>
 <body>
-  <h1 style="font-size:22px;font-weight:700;color:#4c1d95;margin-bottom:6px;">📅 Study Plan: ${formData.subjectName}</h1>
+  <h1 style="font-size:22px;font-weight:700;color:#92400e;margin-bottom:6px;">📅 Study Plan: ${formData.subjectName}</h1>
   <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">AI-Generated Study Plan</p>
   ${statsHtml}
   ${tipsHtml}
@@ -263,22 +262,33 @@ const StudyPlannerPage = () => {
     }
   };
 
-  const getPriorityColor = (p) => ({ critical: 'border-red-500 bg-red-50', high: 'border-orange-500 bg-orange-50', medium: 'border-blue-500 bg-blue-50', low: 'border-green-500 bg-green-50' }[p] || 'border-blue-500 bg-blue-50');
-  const getPriorityBadge = (p) => ({ critical: 'bg-red-500', high: 'bg-orange-500', medium: 'bg-blue-500', low: 'bg-green-500' }[p] || 'bg-blue-500');
+  const getPriorityColor = (p) => ({
+    critical: 'border-red-500 bg-red-50',
+    high: 'border-orange-500 bg-orange-50',
+    medium: 'border-yellow-400 bg-yellow-50',
+    low: 'border-green-500 bg-green-50'
+  }[p] || 'border-yellow-400 bg-yellow-50');
+
+  const getPriorityBadge = (p) => ({
+    critical: 'bg-red-500',
+    high: 'bg-orange-500',
+    medium: 'bg-yellow-500',
+    low: 'bg-green-500'
+  }[p] || 'bg-yellow-500');
 
   // ── Preview Mode ──────────────────────────────────────────────────────────
   if (studyPlan) {
     return (
-      <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-purple-950 to-blue-950 text-white px-6 md:px-16 pt-24 relative overflow-auto">
-        <div className="absolute top-0 left-0 w-[700px] h-[700px] bg-purple-700/25 blur-[180px] rounded-full -z-10" />
-        <div className="absolute bottom-0 right-0 w-[700px] h-[700px] bg-blue-700/25 blur-[180px] rounded-full -z-10" />
+      <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black via-yellow-950 to-black text-white px-6 md:px-16 pt-24 relative overflow-auto">
+        <div className="absolute top-0 left-1/4 w-[900px] h-[900px] bg-yellow-500/30 blur-[180px] rounded-full -translate-y-1/2 -z-10" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-yellow-700/20 blur-[180px] rounded-full -z-10" />
         <div id="toast-container" className="absolute bottom-10 right-10 toast toast-bottom toast-end z-50 space-y-2" />
 
-        <button onClick={handleBackFromPreview} className="md:mt-10 px-4 py-2 rounded-full border-2 border-purple-400 text-purple-400 bg-[#161021]/60 hover:bg-purple-400 hover:text-black transition flex items-center gap-2 z-40 shadow-md">
+        <button onClick={handleBackFromPreview} className="md:mt-10 px-4 py-2 rounded-full border-2 border-yellow-400 text-yellow-400 bg-black/60 hover:bg-yellow-400 hover:text-black transition flex items-center gap-2 z-40 shadow-md">
           ← Back
         </button>
 
-        <h1 className="w-full h-fit mt-4 text-3xl md:text-5xl font-extrabold text-center mb-8 leading-snug bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-blue-300 to-pink-300 animate-shimmer">
+        <h1 className="w-full h-fit mt-4 text-3xl md:text-5xl font-extrabold text-center mb-8 leading-snug bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 animate-shimmer">
           Study Plan: {formData.subjectName}
         </h1>
 
@@ -286,24 +296,24 @@ const StudyPlannerPage = () => {
           {/* Toolbar */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b-2 border-gray-200">
             <div className="text-sm text-gray-600">AI-Generated Study Plan</div>
-            <button onClick={downloadPlan} disabled={downloading} className="px-4 py-2 rounded-md border border-gray-300 text-sm bg-gray-100 hover:bg-gray-200 flex items-center gap-2">
+            <button onClick={downloadPlan} disabled={downloading} className="px-4 py-2 rounded-md border border-yellow-300 text-sm bg-yellow-50 hover:bg-yellow-100 flex items-center gap-2">
               {downloading ? (
-                <><svg className="animate-spin h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>Exporting...</>
+                <><svg className="animate-spin h-4 w-4 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>Exporting...</>
               ) : (
-                <><FaDownload className="text-gray-600" />Download</>
+                <><FaDownload className="text-yellow-600" />Download</>
               )}
             </button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
-              <p className="text-xs text-purple-700 font-semibold mb-1">Exam Date</p>
-              <p className="text-sm font-bold text-purple-900">{studyPlan.examDate}</p>
+            <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-xl border border-yellow-200">
+              <p className="text-xs text-yellow-700 font-semibold mb-1">Exam Date</p>
+              <p className="text-sm font-bold text-yellow-900">{studyPlan.examDate}</p>
             </div>
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
-              <p className="text-xs text-blue-700 font-semibold mb-1">Total Days</p>
-              <p className="text-sm font-bold text-blue-900">{studyPlan.totalDays} days</p>
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-4 rounded-xl border border-amber-200">
+              <p className="text-xs text-amber-700 font-semibold mb-1">Total Days</p>
+              <p className="text-sm font-bold text-amber-900">{studyPlan.totalDays} days</p>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
               <p className="text-xs text-green-700 font-semibold mb-1">Daily Hours</p>
@@ -317,7 +327,7 @@ const StudyPlannerPage = () => {
 
           {/* Study Tips */}
           {studyPlan.studyTips && studyPlan.studyTips.length > 0 && (
-            <div className="mb-6 bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
+            <div className="mb-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
               <h3 className="font-bold text-yellow-900 mb-2">💡 AI Study Tips</h3>
               <ul className="space-y-1">
                 {studyPlan.studyTips.map((tip, i) => (
@@ -330,7 +340,7 @@ const StudyPlannerPage = () => {
           {/* Schedule */}
           <div className="overflow-auto max-h-[500px] space-y-4">
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2 sticky top-0 bg-white py-2 z-10">
-              <FaCalendar className="text-purple-600" />
+              <FaCalendar className="text-yellow-500" />
               Day-wise Schedule
             </h3>
             {studyPlan.schedule.map((day, index) => (
@@ -346,14 +356,14 @@ const StudyPlannerPage = () => {
                     <h4 className="font-bold text-base text-gray-900">{day.title}</h4>
                   </div>
                   <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-lg shadow-sm flex-shrink-0">
-                    <FaClock className="text-xs text-purple-600" />
+                    <FaClock className="text-xs text-yellow-500" />
                     <span className="text-xs font-bold">{day.hours}h</span>
                   </div>
                 </div>
                 <div className="space-y-1.5 mb-3">
                   {day.tasks.map((task, ti) => (
                     <div key={ti} className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 flex-shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-1.5 flex-shrink-0" />
                       <span className="text-sm text-gray-700">{task}</span>
                     </div>
                   ))}
@@ -368,9 +378,9 @@ const StudyPlannerPage = () => {
             ))}
           </div>
 
-          {/* Action buttons — screen only, never in PDF/print */}
+          {/* Action buttons */}
           <div className="mt-6 grid md:grid-cols-2 gap-3">
-            <button onClick={handlePrint} className="bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition-all">
+            <button onClick={handlePrint} className="bg-yellow-500 text-black py-3 rounded-xl font-semibold hover:bg-yellow-400 transition-all">
               🖨️ Print Plan
             </button>
             <button onClick={handleBackFromPreview} className="bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all">
@@ -391,13 +401,14 @@ const StudyPlannerPage = () => {
 
   // ── Form Mode ─────────────────────────────────────────────────────────────
   return (
-    <section className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-blue-950 text-white flex flex-col items-center justify-center px-6 md:px-16 pt-24 relative overflow-hidden">
+    <section className="min-h-screen bg-gradient-to-br from-black via-yellow-950 to-black text-white flex flex-col items-center justify-center px-6 md:px-16 pt-24 relative overflow-hidden">
       <div id="toast-container" className="absolute bottom-10 right-10 toast toast-bottom toast-end z-50 space-y-2" />
 
-      <div className="absolute top-0 left-0 w-[700px] h-[700px] bg-purple-700/25 blur-[180px] rounded-full -z-10" />
-      <div className="absolute bottom-0 right-0 w-[700px] h-[700px] bg-blue-700/25 blur-[180px] rounded-full -z-10" />
+      {/* Yellow glow matching StudyPlanner component */}
+      <div className="absolute top-1/2 left-1/4 w-[900px] h-[900px] bg-yellow-500/30 blur-[180px] rounded-full -translate-y-1/2 -z-10" />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.8)_100%)] -z-10" />
 
-      <h1 className="w-full mt-6 md:mt-0 text-4xl sm:text-6xl font-extrabold text-center mb-4 leading-snug bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 animate-shimmer bg-[length:300%_100%]">
+      <h1 className="w-full mt-6 md:mt-0 text-4xl sm:text-6xl font-extrabold text-center mb-4 leading-snug bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 animate-shimmer bg-[length:300%_100%]">
         AI Study Planner
       </h1>
       <p className="text-gray-400 text-sm sm:text-lg text-center mb-12 max-w-2xl">
@@ -406,7 +417,7 @@ const StudyPlannerPage = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="relative bg-gradient-to-br from-gray-900/70 to-gray-800/50 p-10 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.1)] flex flex-col gap-6 w-full max-w-3xl backdrop-blur-lg transition-all duration-500 hover:shadow-[0_0_60px_rgba(168,85,247,0.3)] z-30"
+        className="relative bg-gradient-to-br from-gray-900/70 to-gray-800/50 p-10 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.1)] flex flex-col gap-6 w-full max-w-3xl backdrop-blur-lg transition-all duration-500 hover:shadow-[0_0_60px_rgba(234,179,8,0.3)] z-30"
       >
         {/* Subject Name */}
         <div>
@@ -416,27 +427,27 @@ const StudyPlannerPage = () => {
             placeholder="e.g., Science, Mathematics, History"
             value={formData.subjectName}
             onChange={(e) => setFormData({ ...formData, subjectName: e.target.value })}
-            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all outline-none"
+            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition-all outline-none"
             required
           />
         </div>
 
-        {/* Topics / Syllabus — the key new field */}
+        {/* Topics / Syllabus */}
         <div>
           <label className="block text-sm font-bold text-gray-300 mb-1 flex items-center gap-2">
-            <FaListAlt className="text-purple-400" />
+            <FaListAlt className="text-yellow-400" />
             Syllabus / Units / Topics
             <span className="text-gray-500 font-normal text-xs">(optional but recommended)</span>
           </label>
           <p className="text-xs text-gray-500 mb-2">
-            Paste your full syllabus, unit names, or topic list. The AI will cover <span className="text-purple-400 font-semibold">every unit and subtopic</span> you provide, distributed across your available days.
+            Paste your full syllabus, unit names, or topic list. The AI will cover <span className="text-yellow-400 font-semibold">every unit and subtopic</span> you provide, distributed across your available days.
           </p>
           <textarea
             rows={8}
             placeholder={`e.g.\nUnit 1: Chemical Reactions — combination, decomposition, oxidation\nUnit 2: Life Processes — nutrition, respiration, transport\nUnit 3: Light — reflection, refraction, lenses\n...\n\nOr paste your entire syllabus — the AI will handle it all.`}
             value={formData.topics}
             onChange={(e) => setFormData({ ...formData, topics: e.target.value })}
-            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all outline-none resize-y text-sm leading-relaxed"
+            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition-all outline-none resize-y text-sm leading-relaxed"
           />
         </div>
 
@@ -448,7 +459,7 @@ const StudyPlannerPage = () => {
             value={formData.examDate}
             onChange={(e) => setFormData({ ...formData, examDate: e.target.value })}
             min={new Date().toISOString().split('T')[0]}
-            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all outline-none"
+            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition-all outline-none"
             required
           />
         </div>
@@ -463,7 +474,7 @@ const StudyPlannerPage = () => {
               max="12"
               value={formData.studyHoursPerDay}
               onChange={(e) => setFormData({ ...formData, studyHoursPerDay: parseInt(e.target.value) || 2 })}
-              className="w-full px-4 py-3 pr-12 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all outline-none"
+              className="w-full px-4 py-3 pr-12 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition-all outline-none"
             />
             <FaClock className="absolute right-4 top-4 text-gray-500" />
           </div>
@@ -475,7 +486,7 @@ const StudyPlannerPage = () => {
           <select
             value={formData.currentKnowledge}
             onChange={(e) => setFormData({ ...formData, currentKnowledge: e.target.value })}
-            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all outline-none"
+            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition-all outline-none"
           >
             <option value="beginner">Beginner (Starting fresh)</option>
             <option value="intermediate">Intermediate (Some knowledge)</option>
@@ -489,7 +500,7 @@ const StudyPlannerPage = () => {
           <select
             value={formData.examType}
             onChange={(e) => setFormData({ ...formData, examType: e.target.value })}
-            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all outline-none"
+            className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-xl text-white focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/50 transition-all outline-none"
           >
             <option value="university">University Exam</option>
             <option value="competitive">Competitive Exam</option>
@@ -503,10 +514,12 @@ const StudyPlannerPage = () => {
           type="submit"
           disabled={loading}
           className={`flex items-center justify-center gap-3 border-2 px-6 py-4 rounded-full text-lg font-semibold transition duration-300 ${
-            loading ? "border-gray-600 text-gray-400 cursor-not-allowed" : "border-white text-white hover:bg-white hover:text-black"
+            loading
+              ? "border-gray-600 text-gray-400 cursor-not-allowed"
+              : "border-white text-white hover:bg-white hover:text-black"
           }`}
         >
-          {loading ? <span>Generating AI Study Plan...</span> : <><FaBrain className="text-xl text-purple-400" />Generate Study Plan</>}
+          {loading ? <span>Generating AI Study Plan...</span> : <><FaBrain className="text-xl text-yellow-400" />Generate Study Plan</>}
         </button>
 
         {loading && (

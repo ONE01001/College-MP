@@ -10,7 +10,6 @@ export const generateStudyPlan = async (req, res) => {
     examType = "university"
   } = req.body;
 
-  // 🔒 Input validation
   if (!subjectName || !daysUntilExam || !studyHoursPerDay) {
     return res.status(400).json({
       success: false,
@@ -18,7 +17,6 @@ export const generateStudyPlan = async (req, res) => {
     });
   }
 
-  // Build the topics block — if user provided topics, include them verbatim
   const topicsBlock = topics && topics.trim().length > 0
     ? `
 THE STUDENT HAS PROVIDED THE FOLLOWING EXACT SYLLABUS/TOPICS TO COVER:
@@ -115,7 +113,6 @@ IMPORTANT: The total days in your plan must add up to exactly ${daysUntilExam}. 
       });
     }
 
-    // 🔥 Clean + parse response
     let aiPlan;
     try {
       const cleanedText = response.text
@@ -131,7 +128,6 @@ IMPORTANT: The total days in your plan must add up to exactly ${daysUntilExam}. 
       });
     }
 
-    // 🔒 Structure validation
     if (!aiPlan || typeof aiPlan !== "object" || !Array.isArray(aiPlan.phases)) {
       return res.status(500).json({
         success: false,
@@ -139,7 +135,6 @@ IMPORTANT: The total days in your plan must add up to exactly ${daysUntilExam}. 
       });
     }
 
-    // 🔥 Build flat schedule from phases
     const schedule = [];
     let dayCounter = 1;
 
