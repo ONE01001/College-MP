@@ -1,6 +1,8 @@
 import React, { useEffect,useRef, useState } from "react";
 import { FaFilePdf, FaUpload, FaBrain, FaDownload } from "react-icons/fa";
 import {extractTextFromPDF} from "../lib/extractPDF"
+import { useSearchParams } from "react-router-dom";
+import { fetchToolHistoryRecord } from "../lib/toolHistory";
 
 const NotesPage = () => {
   const [file, setFile] = useState(null);
@@ -10,10 +12,43 @@ const contentRef=useRef();
   const [previewHtml, setPreviewHtml] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [error, setError] = useState(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const historyId = searchParams.get("history");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (!historyId) return;
+
+    let ignore = false;
+
+    const loadHistory = async () => {
+      setHistoryLoading(true);
+      const data = await fetchToolHistoryRecord(historyId);
+
+      if (ignore) return;
+
+      if (!data.success || data.data.toolType !== "notes-summary") {
+        setError(data.message || "Failed to load saved summary.");
+        setHistoryLoading(false);
+        return;
+      }
+
+      setPreviewHtml(data.data.outputData?.previewHtml || "");
+      setPreviewTitle(data.data.outputData?.previewTitle || "");
+      setError(null);
+      setHistoryLoading(false);
+    };
+
+    loadHistory();
+
+    return () => {
+      ignore = true;
+    };
+  }, [historyId]);
 
   
   const showToast = (message, type = "info") => {
@@ -89,6 +124,14 @@ if(!data.success){
     setError(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (historyLoading && !previewHtml) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-blue-950 text-white flex items-center justify-center px-6 pt-24">
+        <p className="text-lg text-gray-300">Loading saved summary...</p>
+      </section>
+    );
+  }
 
   
   if (previewHtml) {

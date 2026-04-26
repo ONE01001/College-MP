@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaMagic, FaRegLightbulb } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
+import { fetchToolHistoryRecord } from "../lib/toolHistory";
 
 
 
@@ -13,10 +15,44 @@ const PdfPage = () => {
   const [previewHtml, setPreviewHtml] = useState(null);
   const [previewTitle, setPreviewTitle] = useState(""); 
   const [error, setError] = useState(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const historyId = searchParams.get("history");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (!historyId) return;
+
+    let ignore = false;
+
+    const loadHistory = async () => {
+      setHistoryLoading(true);
+      const data = await fetchToolHistoryRecord(historyId);
+
+      if (ignore) return;
+
+      if (!data.success || data.data.toolType !== "notes-generator") {
+        setError(data.message || "Failed to load saved notes.");
+        setHistoryLoading(false);
+        return;
+      }
+
+      setPreviewHtml(data.data.outputData?.previewHtml || "");
+      setPreviewTitle(data.data.outputData?.previewTitle || "");
+      setTopic(data.data.inputData?.topic || "");
+      setError(null);
+      setHistoryLoading(false);
+    };
+
+    loadHistory();
+
+    return () => {
+      ignore = true;
+    };
+  }, [historyId]);
 
   
   const showToast = (message, type = "info") => {
@@ -84,6 +120,14 @@ if(!data.success){
     setError(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (historyLoading && !previewHtml) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-black via-red-950 to-rose-950 text-white flex items-center justify-center px-6 pt-24">
+        <p className="text-lg text-gray-300">Loading saved notes...</p>
+      </section>
+    );
+  }
 
   
   if (previewHtml) {

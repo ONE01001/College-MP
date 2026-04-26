@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaBrain, FaLightbulb, FaCheckCircle, FaChevronDown, FaChevronUp, FaCopy, FaDownload, FaUpload, FaFilePdf, FaTimes } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
 import { extractTextFromPDF } from "../lib/extractPDF";
+import { fetchToolHistoryRecord } from "../lib/toolHistory";
 
 const QUESTION_TYPES = [
   { key: "2_marks", label: "2 Marks", desc: "Short concept-check questions", color: "#22d3ee", glow: "rgba(34,211,238,0.3)" },
@@ -31,8 +33,50 @@ export default function QuestionGeneratorPage() {
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfText, setPdfText] = useState("");
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const historyId = searchParams.get("history");
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  useEffect(() => {
+    if (!historyId) return;
+
+    let ignore = false;
+
+    const loadHistory = async () => {
+      setHistoryLoading(true);
+      const data = await fetchToolHistoryRecord(historyId);
+
+      if (ignore) return;
+
+      if (!data.success || data.data.toolType !== "question-generator") {
+        setHistoryLoading(false);
+        return showToast(data.message || "Failed to load saved questions", "error");
+      }
+
+      const savedResult = data.data.outputData?.result || null;
+      setResult(savedResult);
+      setIncludeAnswers(Boolean(data.data.outputData?.includeAnswers));
+      setQuestionTypes(data.data.inputData?.questionTypes || ["2_marks", "3_marks", "5_marks"]);
+      setContent("");
+      setPdfFile(null);
+      setPdfText("");
+
+      const initExpanded = {};
+      Object.keys(savedResult || {}).forEach((key) => {
+        if (savedResult[key]?.length) initExpanded[`${key}-0`] = true;
+      });
+      setExpanded(initExpanded);
+      setHistoryLoading(false);
+    };
+
+    loadHistory();
+
+    return () => {
+      ignore = true;
+    };
+  }, [historyId]);
 
   const showToast = (message, type = "info") => {
     const container = document.getElementById("qg-toast");
@@ -198,6 +242,14 @@ ${sections}</body></html>`;
   };
 
   const totalQuestions = result ? Object.values(result).reduce((a, arr) => a + (arr?.length || 0), 0) : 0;
+
+  if (historyLoading && !result) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-black via-indigo-950 to-cyan-950 text-white flex items-center justify-center px-6 pt-24">
+        <p className="text-lg text-gray-300">Loading saved questions...</p>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-black via-indigo-950 to-cyan-950 text-white flex flex-col items-center px-4 sm:px-6 md:px-16 pt-24 pb-16 relative overflow-x-hidden">

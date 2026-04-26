@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaCalendar, FaBrain, FaClock, FaDownload, FaListAlt } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
+import { fetchToolHistoryRecord } from "../lib/toolHistory";
 
 const StudyPlannerPage = () => {
   const [formData, setFormData] = useState({
@@ -15,10 +17,68 @@ const StudyPlannerPage = () => {
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const historyId = searchParams.get("history");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (!historyId) return;
+
+    let ignore = false;
+
+    const loadHistory = async () => {
+      setHistoryLoading(true);
+      const data = await fetchToolHistoryRecord(historyId);
+
+      if (ignore) return;
+
+      if (!data.success || data.data.toolType !== "study-plan") {
+        setHistoryLoading(false);
+        return showToast(data.message || "Failed to load saved study plan", "error");
+      }
+
+      const savedInput = data.data.inputData || {};
+      const savedPlan = data.data.outputData || {};
+      const dailyHours = Number(savedInput.studyHoursPerDay || 0);
+      const totalDays = Number(savedInput.daysUntilExam || savedPlan.schedule?.length || 0);
+      const examDate = savedInput.examDate
+        ? new Date(savedInput.examDate).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          })
+        : "";
+
+      setFormData((prev) => ({
+        ...prev,
+        ...savedInput,
+        topics: savedInput.topics || "",
+        studyHoursPerDay: savedInput.studyHoursPerDay || prev.studyHoursPerDay,
+        currentKnowledge: savedInput.currentKnowledge || prev.currentKnowledge,
+        examType: savedInput.examType || prev.examType,
+      }));
+
+      setStudyPlan({
+        ...savedPlan,
+        examDate,
+        totalDays,
+        totalHours: totalDays * dailyHours,
+        dailyHours,
+      });
+      setError(null);
+      setHistoryLoading(false);
+    };
+
+    loadHistory();
+
+    return () => {
+      ignore = true;
+    };
+  }, [historyId]);
 
   const showToast = (message, type = "info") => {
     const container = document.getElementById("toast-container");
@@ -275,6 +335,14 @@ const StudyPlannerPage = () => {
     medium: 'bg-yellow-500',
     low: 'bg-green-500'
   }[p] || 'bg-yellow-500');
+
+  if (historyLoading && !studyPlan) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-black via-yellow-950 to-black text-white flex items-center justify-center px-6 pt-24">
+        <p className="text-lg text-gray-300">Loading saved study plan...</p>
+      </section>
+    );
+  }
 
   // ── Preview Mode ──────────────────────────────────────────────────────────
   if (studyPlan) {

@@ -11,6 +11,7 @@ import FlashcardsPage from "./pages/FlashcardPage";
 import AuthPage  from "./pages/Authpage";
 import StudyPlannerPage from './pages/StudyPlannerPage';
 import QuestionGeneratorPage from "./pages/QuestionGeneratorPage";
+import HistoryPage from "./pages/HistoryPage";
 
 const App = () => {
   const [user,setUser]=React.useState(null);
@@ -47,6 +48,7 @@ const App = () => {
          <Route path="/contact" element={!user? <AuthPage user={user} setUser={setUser}/>:<Contact />} />
          <Route path="/study-planner" element={!user? <AuthPage user={user} setUser={setUser}/>:<StudyPlannerPage />} />
          <Route path="/generate-questions" element={!user? <AuthPage user={user} setUser={setUser}/>:<QuestionGeneratorPage/>} />
+         <Route path="/history" element={!user? <AuthPage user={user} setUser={setUser}/>:<HistoryPage />} />
          
       </Routes>
       <Footer />

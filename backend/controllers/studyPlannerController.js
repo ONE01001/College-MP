@@ -1,4 +1,5 @@
 import { gemini } from "../index.js";
+import { saveToolHistory } from "../services/toolHistory.js";
 
 export const generateStudyPlan = async (req, res) => {
   const {
@@ -166,7 +167,7 @@ IMPORTANT: The total days in your plan must add up to exactly ${daysUntilExam}. 
       console.warn(`⚠️ AI generated ${schedule.length} days but ${daysUntilExam} were requested.`);
     }
 
-    return res.status(200).json({
+    const payload = {
       success: true,
       plan: {
         subject: aiPlan.subject || subjectName,
@@ -174,7 +175,27 @@ IMPORTANT: The total days in your plan must add up to exactly ${daysUntilExam}. 
         studyTips: Array.isArray(aiPlan.studyTips) ? aiPlan.studyTips : []
       },
       message: "Study plan generated successfully."
+    };
+
+    await saveToolHistory({
+      userId: req.user.userId,
+      toolType: "study-plan",
+      routePath: "/study-planner",
+      title: subjectName,
+      inputPreview: topics.trim().slice(0, 180) || subjectName,
+      inputData: {
+        subjectName,
+        topics,
+        examDate: req.body.examDate,
+        studyHoursPerDay,
+        currentKnowledge,
+        examType,
+        daysUntilExam,
+      },
+      outputData: payload.plan,
     });
+
+    return res.status(200).json(payload);
 
   } catch (error) {
     console.error("🔥 SERVER ERROR:", error);

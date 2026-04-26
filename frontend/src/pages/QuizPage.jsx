@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaQuestionCircle, FaBolt, FaBrain } from "react-icons/fa";
 import { motion as Motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
+import { fetchToolHistoryRecord } from "../lib/toolHistory";
 
 
 const QuizPage = () => {
@@ -9,8 +11,41 @@ const QuizPage = () => {
   const [quizData, setQuizData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [answers, setAnswers] = useState({});
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const historyId = searchParams.get("history");
 
   useEffect(() => window.scrollTo(0, 0), []);
+
+  useEffect(() => {
+    if (!historyId) return;
+
+    let ignore = false;
+
+    const loadHistory = async () => {
+      setHistoryLoading(true);
+      const data = await fetchToolHistoryRecord(historyId);
+
+      if (ignore) return;
+
+      if (!data.success || data.data.toolType !== "quiz") {
+        setHistoryLoading(false);
+        return showToast(data.message || "Failed to load saved quiz", "error");
+      }
+
+      setTopic(data.data.inputData?.topic || "");
+      setQuizData(data.data.outputData || null);
+      setSubmitted(false);
+      setAnswers({});
+      setHistoryLoading(false);
+    };
+
+    loadHistory();
+
+    return () => {
+      ignore = true;
+    };
+  }, [historyId]);
 
   const showToast = (message, type = "info") => {
     const container = document.getElementById("toast-container");
@@ -57,6 +92,14 @@ const QuizPage = () => {
   const score = quizData?.mcqs?.questions?.filter(
     (q, i) => answers[i] === q.correctAnswer
   ).length;
+
+  if (historyLoading && !quizData) {
+    return (
+      <section className="min-h-screen bg-gradient-to-b from-black via-[#020617] to-[#0f172a] text-white flex items-center justify-center px-6 pt-20">
+        <p className="text-lg text-gray-300">Loading saved quiz...</p>
+      </section>
+    );
+  }
 
   // Quiz Display
   if (quizData) {

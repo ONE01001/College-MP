@@ -10,25 +10,32 @@ const Navbar = ({user ,setUser}) => {
       <div className="max-w-7xl w-full mx-auto px-4 py-4 md:px-12 lg:px-16 md:py-6 flex flex-wrap items-center justify-between text-white gap-3">
         {/* Left side — logo and title */}
         <div className="flex items-center gap-3 min-w-0">
-          <FaGraduationCap className="text-xl sm:text-2xl md:text-3xl text-white flex-shrink-0" />
-          <span className="text-lg sm:text-xl md:text-2xl font-semibold tracking-tight pointer-events-none truncate">
-            StudyAI
-          </span>
+          <Link
+            to="/"
+            className="flex items-center gap-3 min-w-0 hover:text-gray-300 transition duration-200"
+          >
+            <FaGraduationCap className="text-xl sm:text-2xl md:text-3xl text-white flex-shrink-0" />
+            <span className="text-lg sm:text-xl md:text-2xl font-semibold tracking-tight truncate">
+              StudyAI
+            </span>
+          </Link>
 
           {/* only show links on md+ to avoid crowding mobile */}
           <div className="hidden md:flex gap-6 text-lg ml-8">
-            <Link
-              to="/"
-              className="hover:text-gray-300 transition duration-200 whitespace-nowrap"
-            >
-              Home
-            </Link>
             <Link
               to="/contact"
               className="hover:text-gray-300 transition duration-200 whitespace-nowrap"
             >
               Contact
             </Link>
+            {user && (
+              <Link
+                to="/history"
+                className="hover:text-gray-300 transition duration-200 whitespace-nowrap"
+              >
+                History
+              </Link>
+            )}
           </div>
         </div>
 
@@ -40,6 +47,7 @@ const Navbar = ({user ,setUser}) => {
            <p className="hidden sm:block">{user.username}</p>
          </div>
          }
+         
           {
 !user?
           <Link to="/auth" className="text-xs sm:text-sm lg:text-base border-2 border-white px-3 sm:px-6 py-1.5 sm:py-2 rounded-full bg-transparent hover:bg-white hover:text-black transition duration-300 whitespace-nowrap">

@@ -1,4 +1,11 @@
 import {gemini} from "../index.js"
+import { saveToolHistory } from "../services/toolHistory.js";
+
+const extractFirstHeading = (html = "") => {
+  const match = html.match(/<h1[^>]*>(.*?)<\/h1>/i);
+  const title = match?.[1] ?? "";
+  return title.replace(/<[^>]+>/g, "").trim();
+};
 
 export const generateMCQs = async (req, res) => {
 const {topic ,count=10 ,difficulty="medium"} = req.body;
@@ -71,7 +78,18 @@ const response = await gemini.models.generateContent({
    if(response.text==="0"){
 res.status(200).json({success:false,message: "MCQs cannot be generated from the given input."});
    }else{
-     res.status(200).json({success:true,mcqs: JSON.parse(response.text),message: "MCQs generated successfully."});
+     const mcqs = JSON.parse(response.text);
+     const payload = {success:true,mcqs,message: "MCQs generated successfully."};
+     await saveToolHistory({
+      userId: req.user.userId,
+      toolType: "quiz",
+      routePath: "/quiz",
+      title: mcqs.topic || topic,
+      inputPreview: topic.slice(0, 180),
+      inputData: { topic, count, difficulty },
+      outputData: payload,
+     });
+     res.status(200).json(payload);
 
   }
   
@@ -149,8 +167,20 @@ const response = await gemini.models.generateContent({
    if(response.text==="0"){
 res.status(200).json({success:false, message: "flashcards cannot be generated from the given input."});
    }else{
-
-     res.status(200).json({success:true, flashcards: JSON.parse(response.text),message: "fc's generated successfully."});
+     const flashcards = JSON.parse(response.text);
+     await saveToolHistory({
+      userId: req.user.userId,
+      toolType: "flashcards",
+      routePath: "/flashcard",
+      title: contents.slice(0, 80) || "Flashcards",
+      inputPreview: contents.slice(0, 180),
+      inputData: {},
+      outputData: {
+        topic: contents,
+        cards: flashcards,
+      },
+     });
+     res.status(200).json({success:true, flashcards,message: "fc's generated successfully."});
   }
 
     } catch(error) {
@@ -242,6 +272,19 @@ const response = await gemini.models.generateContent({
    if(response.text==="0"){
 res.status(200).json({success:false, message: "summary cannot be generated from the given input."});
    }else{
+     const previewTitle = extractFirstHeading(response.text) || "Summary";
+     await saveToolHistory({
+      userId: req.user.userId,
+      toolType: "notes-summary",
+      routePath: "/notes",
+      title: previewTitle,
+      inputPreview: contents.slice(0, 180),
+      inputData: { sourceType: "pdf-upload" },
+      outputData: {
+        previewHtml: response.text,
+        previewTitle,
+      },
+     });
      res.status(200).json({success:true, summary:response.text,message: "summary generated successfully."});
 
   }
@@ -346,6 +389,19 @@ const response = await gemini.models.generateContent({
 if(response.text==="0"){
 res.status(200).json({success:false, message: "Notes cannot be generated from the given input."});
    }else{
+     const previewTitle = extractFirstHeading(response.text) || contents.slice(0, 80) || "Generated Notes";
+     await saveToolHistory({
+      userId: req.user.userId,
+      toolType: "notes-generator",
+      routePath: "/pdf",
+      title: previewTitle,
+      inputPreview: contents.slice(0, 180),
+      inputData: { topic: contents },
+      outputData: {
+        previewHtml: response.text,
+        previewTitle,
+      },
+     });
      res.status(200).json({success:true, notes:response.text,message: "notes generated successfully."});
 
   }
@@ -494,13 +550,31 @@ ${content}
     });
 
     
-    return res.status(200).json({
+    const payload = {
       success: true,
       data: {
         questions: filteredQuestions,
       },
       message: "Questions generated successfully",
+    };
+
+    await saveToolHistory({
+      userId: req.user.userId,
+      toolType: "question-generator",
+      routePath: "/generate-questions",
+      title: "Generated Questions",
+      inputPreview: content.slice(0, 180),
+      inputData: {
+        questionTypes,
+        includeAnswers,
+      },
+      outputData: {
+        result: filteredQuestions,
+        includeAnswers,
+      },
     });
+
+    return res.status(200).json(payload);
 
   } catch (error) {
     console.error("Error generating questions:", error);

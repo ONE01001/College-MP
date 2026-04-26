@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaBookOpen, FaClone, FaLeaf } from "react-icons/fa";
 import { motion as Motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
+import { fetchToolHistoryRecord } from "../lib/toolHistory";
 
 
 const FlashcardsPage = () => {
@@ -9,8 +11,41 @@ const FlashcardsPage = () => {
   const [flashcardsData, setFlashcardsData] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const historyId = searchParams.get("history");
 
   useEffect(() => window.scrollTo(0, 0), []);
+
+  useEffect(() => {
+    if (!historyId) return;
+
+    let ignore = false;
+
+    const loadHistory = async () => {
+      setHistoryLoading(true);
+      const data = await fetchToolHistoryRecord(historyId);
+
+      if (ignore) return;
+
+      if (!data.success || data.data.toolType !== "flashcards") {
+        setHistoryLoading(false);
+        return showToast(data.message || "Failed to load saved flashcards", "error");
+      }
+
+      setFlashcardsData(data.data.outputData || null);
+      setTopic(data.data.outputData?.topic || "");
+      setCurrentIndex(0);
+      setFlipped(false);
+      setHistoryLoading(false);
+    };
+
+    loadHistory();
+
+    return () => {
+      ignore = true;
+    };
+  }, [historyId]);
 
   const showToast = (message, type = "info") => {
     const container = document.getElementById("toast-container");
@@ -69,6 +104,14 @@ const FlashcardsPage = () => {
       prev === 0 ? flashcardsData.cards.length - 1 : prev - 1
     );
   };
+
+  if (historyLoading && !flashcardsData) {
+    return (
+      <section className="min-h-screen bg-gradient-to-br from-[#001a0f] via-[#002b1a] to-[#003322] text-white flex items-center justify-center px-6 pt-24">
+        <p className="text-lg text-gray-300">Loading saved flashcards...</p>
+      </section>
+    );
+  }
 
   if (flashcardsData) {
     const currentCard = flashcardsData.cards[currentIndex];
