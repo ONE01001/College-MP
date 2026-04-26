@@ -45,8 +45,8 @@ const App = () => {
         <Route path="/pdf" element={!user? <AuthPage user={user} setUser={setUser}/>:<PdfPage />} />
          <Route path="/flashcard" element={!user? <AuthPage user={user} setUser={setUser}/>:<FlashcardsPage />} />
          <Route path="/contact" element={!user? <AuthPage user={user} setUser={setUser}/>:<Contact />} />
-         <Route path="/study-planner" element={<StudyPlannerPage />} />
-         <Route path="/generate-questions" element={<QuestionGeneratorPage/>} />
+         <Route path="/study-planner" element={!user? <AuthPage user={user} setUser={setUser}/>:<StudyPlannerPage />} />
+         <Route path="/generate-questions" element={!user? <AuthPage user={user} setUser={setUser}/>:<QuestionGeneratorPage/>} />
          
       </Routes>
       <Footer />

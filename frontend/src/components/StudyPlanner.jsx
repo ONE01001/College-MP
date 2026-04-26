@@ -32,7 +32,7 @@ const StudyPlanner = () => {
         </div>
       </div>
       <div className="absolute top-10 right-0 xl:right-10 h-fit">
-        <img src="/study planner.png" alt="Study Planner Illustration" className="xl:w-200 xl:h-200 w-150 h-150 object-contain opacity-20 xl:opacity-50 2xl:opacity-70 mask" />
+        <img src="/study-planner2.png" alt="Study Planner Illustration" className="w-200 h-200 object-contain opacity-20 xl:opacity-50 2xl:opacity-70 mask" />
       </div>
     </section>
   );
