@@ -9,7 +9,7 @@ const SmartQuestionGenerator = () => {
       id="question-generator"
       className="relative h-screen w-full flex items-center justify-end bg-black text-white overflow-hidden px-10 sm:px-20"
     >
-    
+
       <div className="absolute inset-0 bg-gradient-to-br from-orange-900/10 via-black to-black opacity-90 z-0"></div>
 
       <div className="absolute top-1/2 right-1/4 w-[700px] h-[700px] bg-orange-500/25 blur-[150px] rounded-full -translate-y-1/2 z-0"></div>
@@ -41,7 +41,7 @@ const SmartQuestionGenerator = () => {
 
       <div className="absolute top-10 md:left-10 h-fit">
         <img
-          src="/question.png"
+          src="/question-generator.png"
           alt="Illustration"
           className="w-200 h-200 object-contain opacity-20 xl:opacity-50 2xl:opacity-70 mask"
         />

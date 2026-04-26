@@ -15,7 +15,7 @@ const StudyPlanner = () => {
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_45%,rgba(0,0,0,0.8)_100%)] z-0"></div>
 
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-7xl w-full gap-10">
-     
+
         <div className="flex-1 text-left space-y-8">
           <h2 className=" text-4xl sm:text-6xl font-extrabold leading-tight">
             Create Study Plans <br />
@@ -31,9 +31,9 @@ const StudyPlanner = () => {
           </button>
         </div>
       </div>
-       <div className="absolute top-10 right-0 xl:right-10 h-fit">
-         <img src="/planner.png" alt="Study Planner Illustration" className="xl:w-200 xl:h-200 w-150 h-150 object-contain opacity-20 xl:opacity-50 2xl:opacity-70 mask"/>
-       </div>
+      <div className="absolute top-10 right-0 xl:right-10 h-fit">
+        <img src="/study-planner.png" alt="Study Planner Illustration" className="xl:w-200 xl:h-200 w-150 h-150 object-contain opacity-20 xl:opacity-50 2xl:opacity-70 mask" />
+      </div>
     </section>
   );
 };
