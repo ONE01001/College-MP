@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -23,19 +24,25 @@ const Footer = () => {
         </div>
 
         {/* 📘 Center - Navigation */}
-        <nav className="flex flex-wrap justify-center md:justify-end gap-8 text-sm font-medium">
-          <a href="/pdf" className="hover:text-red-400 transition">
+        <nav className="flex flex-wrap justify-center md:justify-end gap-6 text-sm font-medium">
+          <Link to="/pdf" className="hover:text-red-400 transition">
             Notes
-          </a>
-          <a href="/quiz" className="hover:text-blue-400 transition">
+          </Link>
+          <Link to="/quiz" className="hover:text-blue-400 transition">
             Quiz
-          </a>
-          <a href="/notes" className="hover:text-purple-400 transition">
+          </Link>
+          <Link to="/notes" className="hover:text-purple-400 transition">
             Summary
-          </a>
-          <a href="/flashcard" className="hover:text-pink-400 transition">
+          </Link>
+          <Link to="/flashcard" className="hover:text-pink-400 transition">
             Flashcard
-          </a>
+          </Link>
+          <Link to="/study-planner" className="hover:text-yellow-400 transition">
+            Planner
+          </Link>
+          <Link to="/generate-questions" className="hover:text-cyan-400 transition">
+            Questions
+          </Link>
         </nav>
       </div>
 

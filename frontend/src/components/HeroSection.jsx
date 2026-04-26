@@ -56,6 +56,14 @@ const HeroSection = () => {
               <button onClick={() => scrollToSection('flashcard')} className="px-1 py-1">
                 FLASH CARDS
               </button>
+              <span className="text-white/70">\</span>
+              <button onClick={() => scrollToSection('study-planner')} className="px-1 py-1">
+                STUDY PLANNER
+              </button>
+              <span className="text-white/70">\</span>
+              <button onClick={() => scrollToSection('question-generator')} className="px-1 py-1">
+                QUESTION GENERATOR
+              </button>
             </div>
           </div>
 

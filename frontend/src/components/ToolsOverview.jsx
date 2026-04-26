@@ -1,5 +1,5 @@
 import React from "react";
-import { Book, FileText, ListChecks, Layers } from "lucide-react";
+import { FileText, ListChecks, Layers, CalendarRange, Sparkles, BookOpenText } from "lucide-react";
 
 const BenefitCard = ({ icon: Icon, title, desc }) => (
   <div
@@ -31,28 +31,40 @@ const BenefitCard = ({ icon: Icon, title, desc }) => (
 export default function WebsiteBenefits({ benefits }) {
   const defaultBenefits = benefits || [
     {
-      key: "smart-flashcards",
-      title: "Interactive Flashcards",
-      desc: "Transform any topic into digital flashcards with instant answers, helping you learn actively and retain information longer. Perfect for spaced repetition learning.",
-      icon: Layers,
-    },
-    {
-      key: "adaptive-tests",
-      title: "Adaptive Practice Tests",
-      desc: "Generate customized MCQs for any chosen topic. Test yourself, get instant results, and track progress with AI-powered scoring and structured answers.",
-      icon: ListChecks,
-    },
-    {
-      key: "smart-notes",
-      title: "Smart Notes & Summaries",
-      desc: "Automatically create well-structured notes or summarize large PDFs, saving time and giving you concise, exam-ready material to revise efficiently.",
+      key: "notes-generator",
+      title: "AI Notes Generator",
+      desc: "Turn a chapter, unit, or even a full syllabus into detailed, well-structured study notes that are easier to understand, faster to revise, and ready to export whenever you need them.",
       icon: FileText,
     },
     {
-      key: "revision-boost",
-      title: "Boost Memory & Retention",
-      desc: "By combining flashcards, practice tests, and summaries, you can revise smarter, remember more, and improve your learning outcomes significantly.",
-      icon: Book,
+      key: "quiz-generator",
+      title: "Smart Quiz Generator",
+      desc: "Create MCQ-based quizzes for any topic and test your understanding instantly through clear, interactive practice sessions that help you revise concepts and spot weak areas quickly.",
+      icon: ListChecks,
+    },
+    {
+      key: "notes-summarizer",
+      title: "PDF Notes Summarizer",
+      desc: "Upload study PDFs and get concise, structured summaries that highlight the most important concepts, definitions, and takeaways, so large material becomes much easier to review.",
+      icon: BookOpenText,
+    },
+    {
+      key: "smart-flashcards",
+      title: "Interactive Flashcards",
+      desc: "Convert topics into revision-friendly flashcards so you can learn actively, review important ideas faster, and strengthen long-term memory retention through repeated practice.",
+      icon: Layers,
+    },
+    {
+      key: "study-planner",
+      title: "AI Study Planner",
+      desc: "Build day-wise study schedules based on your exam date, syllabus, and available study hours so your preparation stays realistic, balanced, and focused from start to finish.",
+      icon: CalendarRange,
+    },
+    {
+      key: "question-generator",
+      title: "Exam Question Generator",
+      desc: "Generate 2-mark, 3-mark, and 5-mark questions with optional answers from your notes or PDFs, making targeted exam preparation more structured, practical, and effective.",
+      icon: Sparkles,
     },
   ];
 
@@ -83,7 +95,6 @@ export default function WebsiteBenefits({ benefits }) {
           </p>
         </div>
 
-        {/* grid without animations */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
           {cards.map((b) => (
             <BenefitCard

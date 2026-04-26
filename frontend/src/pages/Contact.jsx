@@ -62,20 +62,20 @@ const ContactPage = () => {
         <input
           type="text"
           placeholder="Your Name"
-          className="input input-bordered w-full bg-gray-800/70 text-white mb-4"
+          className="w-full rounded-xl border border-white/12 bg-gradient-to-r from-white/8 to-white/4 px-4 py-3 text-white placeholder:text-gray-400 mb-4 outline-none transition-all duration-300 focus:border-purple-400/70 focus:bg-white/10 focus:shadow-[0_0_0_4px_rgba(168,85,247,0.12)]"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         />
         <input
           type="email"
           placeholder="Your Email"
-          className="input input-bordered w-full bg-gray-800/70 text-white mb-4"
+          className="w-full rounded-xl border border-white/12 bg-gradient-to-r from-white/8 to-white/4 px-4 py-3 text-white placeholder:text-gray-400 mb-4 outline-none transition-all duration-300 focus:border-blue-400/70 focus:bg-white/10 focus:shadow-[0_0_0_4px_rgba(96,165,250,0.12)]"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
         <textarea
           placeholder="Your Message"
-          className="textarea textarea-bordered w-full bg-gray-800/70 text-white h-28 mb-6 resize-none"
+          className="w-full h-28 rounded-xl border border-white/12 bg-gradient-to-br from-white/8 to-white/4 px-4 py-3 text-white placeholder:text-gray-400 mb-6 resize-none outline-none transition-all duration-300 focus:border-pink-400/70 focus:bg-white/10 focus:shadow-[0_0_0_4px_rgba(244,114,182,0.12)]"
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
         ></textarea>
