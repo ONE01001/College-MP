@@ -41,7 +41,7 @@ const SmartQuestionGenerator = () => {
 
       <div className="absolute top-10 md:left-10 h-fit">
         <img
-          src="/question-generator.png"
+          src="/question gen.png"
           alt="Illustration"
           className="w-200 h-200 object-contain opacity-20 xl:opacity-50 2xl:opacity-70 mask"
         />
