@@ -9,6 +9,13 @@
 ## 🏷️ Title
 StudyAI - AI-Powered Study Assistant 
 
+
+## 👨‍💻 Developer
+- Name: Krish Dua , Rahul verma , Hardik Rana
+- Project: StudyAI (Collaborative Project)
+
+
+
 ## 📖 Overview
 StudyAI is a collaborative full-stack web platform that helps students generate study material quickly using AI. It combines authentication, PDF text extraction, and Gemini-powered content generation to produce:
 - 📝 Quiz questions (MCQs)
@@ -27,6 +34,9 @@ The frontend is built with React + Vite + Tailwind, while the backend uses Expre
 ## Test Credentials
 - Email: demo@example.com
 - Passowrd: demo@1234
+
+## 🆕 New Feature Added
+- Study history feature to save and revisit previously generated study content and activity.
 
 ## ✨ Features
 - User signup/login/logout with JWT cookie-based authentication
@@ -115,10 +125,6 @@ This builds the frontend and serves it from Express.
 - Notes Generator: creates structured topic or unit-wise notes.
 - PDF Summarizer: converts long study material into concise and readable summaries.
 
-## 🚧 Coming Soon
-- Study history feature to save and revisit previously generated study content and activity.
-- Expanded Google auth flow for faster sign-in and smoother onboarding.
-
 ## 🗂️ Project Structure
 ```text
 College_MP/
@@ -149,10 +155,3 @@ College_MP/
 - Demonstrates full-stack ownership: UI, API, auth, data, and deployment flow
 - Includes production-oriented concerns: route protection, rate limiting, environment config, static asset serving
 - Uses modern React ecosystem and LLM integration in a usable product format
-
-## 👨‍💻 Author
-- Name: Krish Dua , Rahul verma , Hardik Rana
-- Project: StudyAI (Collaborative Project)
-
-
-
